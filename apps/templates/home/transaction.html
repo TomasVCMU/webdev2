@@ -1,0 +1,168 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Transactions {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<style>
+	.add-transaction-button {
+		margin-top: 15px;
+	}
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pc-container">
+	<div class="pcoded-content">
+		<!-- [ breadcrumb ] start -->
+		...
+		<!-- [ breadcrumb ] end -->
+		<!-- [ Main Content ] start -->
+		<div class="row">
+			<!-- [ Add Transaction ] start -->
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-header">
+						<h5>Add Transaction</h5>
+					</div>
+					<div class="card-body">
+
+						<!-- Add Transaction form -->
+						<form method="post">
+							{% csrf_token %}
+							<!-- Updated code -->
+							<div class="col-md-4">
+								<div class="form-group">
+									{{ form.transaction_type.label_tag }}
+									{{ form.transaction_type }}
+
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										{{ form.transaction_date.label_tag }}
+										{{ form.transaction_date }}
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										{{ form.description.label_tag }}
+										{{ form.description }}
+									</div>
+								</div>
+
+							</div>
+							<div class="row" id="income-category-section">
+								<div class="col-md-4">
+									<div class="form-group">
+										{{ form.amount.label_tag }}
+										{{ form.amount }}
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										{{ form.category.label_tag }}
+										{{ form.category }}
+									</div>
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-primary add-transaction-button">Add
+								Transaction</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- [ Add Transaction ] end -->
+			<!-- [ transactions ] start -->
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-header">
+						<h5>Transactions</h5>
+					</div>
+					<div class="card-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Description</th>
+									<th>Category</th>
+									<th>Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for transaction in transactions %}
+								<tr>
+									<td>{{ transaction.transaction_date }}</td>
+									<td>{{ transaction.description }}</td>
+									<td>{{ transaction.category }}</td>
+									<td>${{ transaction.amount }}</td>
+								</tr>
+								{% empty %}
+								<tr>
+									<td colspan="4">No transactions found.</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						<!-- You can add pagination here if necessary -->
+					</div>
+				</div>
+			</div>
+			<!-- [ transactions ] end -->
+		</div>
+		<!-- [ Main Content ] end -->
+	</div>
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+	function updateCategoryChoices() {
+		const transactionType = document.getElementById('id_transaction_type').value;
+		const categoryDropdown = document.getElementById('id_category');
+		const incomeCategories = ['salary', 'gift', 'investments', 'other'];
+		const expenseCategories = ['Rent', 'Electricity', 'Groceries', 'Entertainment', 'Other'];
+
+		if (transactionType === 'income') {
+			categoryDropdown.innerHTML = '';
+			for (const category of incomeCategories) {
+				const option = document.createElement('option');
+				option.value = category;
+				option.text = category.charAt(0).toUpperCase() + category.slice(1);
+				categoryDropdown.add(option);
+			}
+		} else {
+			categoryDropdown.innerHTML = '';
+			for (const category of expenseCategories) {
+				const option = document.createElement('option');
+				option.value = category;
+				option.text = category.charAt(0).toUpperCase() + category.slice(1);
+				categoryDropdown.add(option);
+			}
+		}
+	}
+
+	// Call updateCategoryChoices() initially to set the initial category choices
+	updateCategoryChoices();
+
+	// Add an event listener to the transaction type dropdown to update the category dropdown when the transaction type changes
+	document.getElementById('id_transaction_type').addEventListener('change', updateCategoryChoices);
+</script>
+
+
+
+
+
+
+{% endblock javascripts %}

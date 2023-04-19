@@ -1,0 +1,189 @@
+{% extends "layouts/base.html" %}
+{% load custom_filters %}
+{% load json_filter %}
+{% load static %}
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pc-container">
+    <div class="pcoded-content">
+        <!-- [ breadcrumb ] start -->
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="page-header-title">
+                            <h5 class="m-b-10">Dashboard</h5>
+                        </div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item">Dashboard</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- [ breadcrumb ] end -->
+        <!-- [ Main Content ] start -->
+        <div class="row">
+            <div class="row">
+
+                <div class="col-sm-3">
+                    <div class="card prod-p-card background-pattern">
+                        <div class="card-body">
+                            <div class="row align-items-center m-b-0">
+                                <div class="col">
+                                    <h6 class="m-b-5">Total Income</h6>
+                                    <h3 class="m-b-0">${{ total_income|floatformat:2 }}</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="material-icons-two-tone text-primary">card_giftcard</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card prod-p-card bg-primary background-pattern-white">
+                        <div class="card-body">
+                            <div class="row align-items-center m-b-0">
+                                <div class="col">
+                                    <h6 class="m-b-5 text-white">Total Expenses</h6>
+                                    <h3 class="m-b-0 text-white">${{ total_expenses|floatformat:2 }}</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="material-icons-two-tone text-white">local_mall</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card prod-p-card bg-primary background-pattern-white">
+                        <div class="card-body">
+                            <div class="row align-items-center m-b-0">
+                                <div class="col">
+                                    <h6 class="m-b-5 text-white">Balance</h6>
+                                    <h3 class="m-b-0 text-white">${{ balance|floatformat:2 }}</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="material-icons-two-tone text-white">monetization_on</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card prod-p-card background-pattern">
+                        <div class="card-body">
+                            <div class="row align-items-center m-b-0">
+                                <div class="col">
+                                    <h6 class="m-b-5">Budget</h6>
+                                    <h3 class="m-b-0">${{ budget|floatformat:2 }}</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="material-icons-two-tone text-primary">local_offer</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xl-6 col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Expenses vs Income</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="bar-chart-1"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- support-section end -->
+            <!-- customer-section start -->
+            <div class="col-xl-6 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h6>Monthly expense breakdown</h6>
+
+                        <div class="row d-flex justify-content-center align-items-center">
+                            <div class="col">
+                                <div id="pie-chart-2" style="width:100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Recent transactions start -->
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Recent transactions</h5>
+                    </div>
+                    <div class="card-body table-border-style">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Title</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Category</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for transaction in transactions %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ transaction.description }}</td>
+                                        <td>{{ transaction.transaction_date }}</td>
+                                        <td>${{ transaction.amount }}</td>
+                                        <td>{{ transaction.category }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5">No transactions found.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Recent transactions end -->
+        </div>
+        <!-- [ Main Content ] end -->
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="/static/assets/js/plugins/apexcharts.min.js"></script>
+<script src="/static/assets/js/pages/chart-apex.js"></script>
+<script src="/static/assets/js/pages/dashboard-sale.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    var monthlyData = JSON.parse('{{ monthly_data_json|safe }}');
+    var current_year = {{current_year}};
+    var expense_categories_data = {{ expense_categories_data|safe }};
+</script>
+
+
+{% endblock javascripts %}

@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Starter {% endblock %} 
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pc-container">
+        <div class="pcoded-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10">Budget</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                <li class="breadcrumb-item">Budget</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
+            <!-- [ Main Content ] start -->
+            <div class="row">
+                <!-- [ budget ] start -->
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Budget</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="input-group mb-3">
+                                    {{ form.category }}
+                                    {{ form.budget_amount }}
+                                    <button type="submit" class="btn btn-primary">Add</button>
+                                </div>
+                            </form>
+                            <ul class="list-group">
+                                {% for budget in budgets %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ budget.category }}
+                                    <span class="badge bg-primary rounded-pill">${{ budget.budget_amount }}</span>
+                                    <!-- You can add a delete button here, similar to the example -->
+                                </li>
+                                {% empty %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    No budgets yet.
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- [ budget ] end -->
+            </div>
+            <!-- [ Main Content ] end -->
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
